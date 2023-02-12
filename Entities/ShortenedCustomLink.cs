@@ -2,13 +2,14 @@ namespace DevEncurtaUrl.API.Entities
 {
     public class ShortenedCustomLink
     {
-        public ShortenedCustomLink(string title, string destinationLink)
+        private ShortenedCustomLink() { }
+        public ShortenedCustomLink(string title, string destinationLink, string domain)
         {
             var code = title.Split(" ")[0];
 
             Title = title; // ultimo-artigo Blog
             DestinationLink = destinationLink;
-            ShortenedLink = $"localhost:3000/{code}";
+            ShortenedLink = $"{domain}/{code}";
             Code = code;
             CreatedAt = DateTime.Now.ToShortDateString();
         }
