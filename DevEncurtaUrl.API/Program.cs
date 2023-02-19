@@ -15,7 +15,7 @@ builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseInMemoryDatabase
 // var connectionString = builder.Configuration.GetConnectionString("DevEncurtaUrl");
 // builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseSqlServer(connectionString));
 
-// TODO: Para usar com angular?
+// TODO: Para usar com angular
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -44,7 +44,7 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
-    var xmlFile = "DevEncurtaUrl.API.xml";
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
@@ -80,7 +80,7 @@ if (true)
     app.UseSwaggerUI();
 }
 
-app.UseCors(); // TODO: Para usar com angular?
+app.UseCors(); // TODO: Para usar com angular
 
 app.UseHttpsRedirection();
 
