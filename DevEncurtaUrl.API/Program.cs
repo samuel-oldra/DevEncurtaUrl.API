@@ -2,18 +2,22 @@ using DevEncurtaUrl.API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Serilog.Sinks.MSSqlServer;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 // PARA ACESSO AO BANCO EM MEMÓRIA
-builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseInMemoryDatabase("DevEncurtaUrlDb"));
+// builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseInMemoryDatabase("DevEncurtaUrlDb"));
 
 // PARA ACESSO AO SQL Server
-// var connectionString = builder.Configuration.GetConnectionString("DevEncurtaUrl");
+// var connectionString = builder.Configuration.GetConnectionString("DevEncurtaUrlCs");
 // builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseSqlServer(connectionString));
+
+// PARA ACESSO AO SQLite
+var connectionString = builder.Configuration.GetConnectionString("DevEncurtaUrlCs");
+builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseSqlite(connectionString));
 
 // TODO: Para usar com angular
 builder.Services.AddCors(options =>
@@ -63,6 +67,9 @@ builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
         //         AutoCreateSqlTable = true,
         //         TableName = "Logs"
         //     })
+
+        // PARA LOG NO SQLite
+        .WriteTo.SQLite(Environment.CurrentDirectory + @"\Data\dados.db")
 
         // PARA LOG NO CONSOLE
         .WriteTo.Console()
