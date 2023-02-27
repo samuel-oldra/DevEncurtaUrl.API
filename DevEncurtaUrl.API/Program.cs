@@ -19,17 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DevEncurtaUrlCs");
 builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseSqlite(connectionString));
 
-// TODO: Para usar com angular
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-        }
-    );
-});
-
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -51,6 +40,28 @@ builder.Services.AddSwaggerGen(c =>
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
+});
+
+// Políticas de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }
+    );
+    options.AddPolicy("GitHub",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5000",
+                               "https://github.com/samuel-oldra")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        }
+    );
 });
 
 // Serilog
@@ -92,9 +103,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseCors(); // TODO: Para usar com angular
-
 app.UseHttpsRedirection();
+
+// Enable CORS
+app.UseCors();
+// app.UseCors("GitHub");
+// app.UseCors(o => o.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 app.UseAuthorization();
 
