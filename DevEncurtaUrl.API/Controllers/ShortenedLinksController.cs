@@ -81,6 +81,16 @@ namespace DevEncurtaUrl.API.Controllers
 
             var link = new ShortenedCustomLink(model.Title, model.DestinationLink, domain);
 
+            // Verifica/atualiza links com o mesmo Code
+            var sufixo = 0;
+            var exists = true;
+            while (exists)
+            {
+                exists = _context.Links.Any(l => l.Code == link.Code);
+                if (!exists) continue;
+                link.Code = string.Format("{0}-{1}", link.Title.Split(" ")[0].ToLower(), ++sufixo);
+            }
+
             _context.Links.Add(link);
             _context.SaveChanges();
 
