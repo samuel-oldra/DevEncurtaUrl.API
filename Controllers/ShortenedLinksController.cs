@@ -2,6 +2,7 @@ using DevEncurtaUrl.API.Entities;
 using DevEncurtaUrl.API.Models;
 using DevEncurtaUrl.API.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace DevEncurtaUrl.API.Controllers
 {
@@ -18,6 +19,8 @@ namespace DevEncurtaUrl.API.Controllers
 
         [HttpGet]
         public IActionResult Get() {
+            // Log.Information("Listagem foi chamada!");
+
             return Ok(_context.Links);
         }
 
@@ -33,9 +36,21 @@ namespace DevEncurtaUrl.API.Controllers
             return Ok(link);
         }
 
+        /// <summary>
+        /// Cadastrar um link encurtado
+        /// </summary>
+        /// <remarks>
+        /// { "title": "ultimo-artigo Blog", "destinationLink" : "https://www.luisdev.com.br/2023/02/05/atributos-no-c-como-criar-e-aplicar-em-seu-projeto" }
+        /// </remarks>
+        /// <param name="model">Dados de link</param>
+        /// <returns>Objeto recém-criado</returns>
+        /// <response code="201">Sucesso!</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public IActionResult Post(AddOrUpdateShortenedLinkModel model) {
-            var link = new ShortenedCustomLink(model.Title, model.DestinationLink);
+            var domain = HttpContext.Request.Host.Value;
+
+            var link = new ShortenedCustomLink(model.Title, model.DestinationLink, domain);
 
             _context.Links.Add(link);
             _context.SaveChanges();
