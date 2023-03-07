@@ -13,25 +13,25 @@ namespace DevEncurtaUrl.API.Controllers
         private readonly DevEncurtaUrlDbContext _context;
 
         public ShortenedLinksController(DevEncurtaUrlDbContext context)
-        {
-            _context = context;
-        }
+            => _context = context;
 
         [HttpGet]
-        public IActionResult Get() {
-            // Log.Information("Listagem foi chamada!");
+        public IActionResult Get()
+        {
+            Log.Information("Endpoint - GET: api/shortenedLinks");
 
-            return Ok(_context.Links);
+            var links = _context.Links;
+
+            return Ok(links);
         }
 
-        // api/shortenedLinks/1 GET
         [HttpGet("{id}")]
-        public IActionResult GetById(int id) {
+        public IActionResult GetById(int id)
+        {
             var link = _context.Links.SingleOrDefault(l => l.Id == id);
 
-            if (link == null) {
+            if (link == null)
                 return NotFound();
-            }
 
             return Ok(link);
         }
@@ -47,7 +47,8 @@ namespace DevEncurtaUrl.API.Controllers
         /// <response code="201">Sucesso!</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public IActionResult Post(AddOrUpdateShortenedLinkModel model) {
+        public IActionResult Post(AddOrUpdateShortenedLinkModel model)
+        {
             var domain = HttpContext.Request.Host.Value;
 
             var link = new ShortenedCustomLink(model.Title, model.DestinationLink, domain);
@@ -59,12 +60,12 @@ namespace DevEncurtaUrl.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, AddOrUpdateShortenedLinkModel model) {
+        public IActionResult Put(int id, AddOrUpdateShortenedLinkModel model)
+        {
             var link = _context.Links.SingleOrDefault(l => l.Id == id);
 
-            if (link == null) {
+            if (link == null)
                 return NotFound();
-            }
 
             link.Update(model.Title, model.DestinationLink);
 
@@ -74,29 +75,27 @@ namespace DevEncurtaUrl.API.Controllers
             return NoContent();
         }
 
-        // api/shortenedLinks/123
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id) {
+        public IActionResult Delete(int id)
+        {
             var link = _context.Links.SingleOrDefault(l => l.Id == id);
 
-            if (link == null) {
+            if (link == null)
                 return NotFound();
-            }
 
             _context.Links.Remove(link);
             _context.SaveChanges();
-            
+
             return NoContent();
         }
 
-        // localhost:3000/ultimo-artigo
         [HttpGet("/{code}")]
-        public IActionResult RedirectLink(string code) {
+        public IActionResult RedirectLink(string code)
+        {
             var link = _context.Links.SingleOrDefault(l => l.Code == code);
 
-            if (link == null) {
+            if (link == null)
                 return NotFound();
-            }
 
             return Redirect(link.DestinationLink);
         }
