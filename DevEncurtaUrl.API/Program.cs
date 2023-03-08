@@ -7,33 +7,40 @@ using Serilog.Sinks.MSSqlServer;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddCors(options => {
+
+// PARA ACESSO AO BANCO EM MEMÓRIA
+builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseInMemoryDatabase("DevEncurtaUrlDb"));
+
+// PARA ACESSO AO SQL Server
+// var connectionString = builder.Configuration.GetConnectionString("DevEncurtaUrl");
+// builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => o.UseSqlServer(connectionString));
+
+// TODO: Para usar com angular?
+builder.Services.AddCors(options =>
+{
     options.AddDefaultPolicy(
-        policy => {
+        policy =>
+        {
             policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
         }
     );
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DevEncurtaUrl");
-
-// builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => 
-//     o.UseSqlServer(connectionString));
-
-builder.Services.AddDbContext<DevEncurtaUrlDbContext>(o => 
-    o.UseInMemoryDatabase("DevEncurtaUrlDb"));
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => {
-    c.SwaggerDoc("v1", new OpenApiInfo {
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
         Title = "DevEncurtaUrl.API",
         Version = "v1",
-        Contact = new OpenApiContact {
-            Name = "LuisDev",
-            Email = "luisdev@mail.com",
-            Url = new Uri("https://luisdev.com.br")
+        Contact = new OpenApiContact
+        {
+            Name = "Samuel B. Oldra",
+            Email = "samuel.oldra@gmail.com",
+            Url = new Uri("https://github.com/samuel-oldra")
         }
     });
 
@@ -42,28 +49,38 @@ builder.Services.AddSwaggerGen(c => {
     c.IncludeXmlComments(xmlPath);
 });
 
-// builder.Host.ConfigureAppConfiguration((hostingContext, config) => {
-//     Serilog.Log.Logger = new LoggerConfiguration()
-//         .Enrich.FromLogContext()
-//         .WriteTo.MSSqlServer(connectionString, 
-//         sinkOptions: new MSSqlServerSinkOptions() {
-//             AutoCreateSqlTable = true,
-//             TableName = "Logs"
-//         })
-//         .WriteTo.Console()
-//         .CreateLogger();
-// }).UseSerilog();
+// Serilog
+builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+{
+    Serilog.Log.Logger = new LoggerConfiguration()
+        .Enrich.FromLogContext()
+
+        // PARA LOG NO SQL Server
+        // .WriteTo.MSSqlServer(
+        //     connectionString,
+        //     sinkOptions: new MSSqlServerSinkOptions()
+        //     {
+        //         AutoCreateSqlTable = true,
+        //         TableName = "Logs"
+        //     })
+
+        // PARA LOG NO CONSOLE
+        .WriteTo.Console()
+
+        .CreateLogger();
+}).UseSerilog();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+// INFO: Swagger visível só em desenvolvimento
 if (true)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseCors();
+app.UseCors(); // TODO: Para usar com angular?
 
 app.UseHttpsRedirection();
 
