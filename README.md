@@ -26,17 +26,17 @@ Foi desenvolvida uma API REST completa de encurtamento de links.
 ## Comandos básicos
 ```
 dotnet new gitignore
-dotnet new webapi -o DevGames.API
+dotnet new webapi -o DevEncurtaUrl.API
 dotnet build
 dotnet run
 dotnet watch run
-dotnet test
 dotnet publish
 ```
 
 ## Tool Entity Framework Core (migrations)
 ```
 dotnet tool install --global dotnet-ef
+dotnet tool uninstall --global dotnet-ef
 ```
 
 ## Migrations

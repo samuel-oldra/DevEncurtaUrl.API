@@ -81,10 +81,15 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 // INFO: Swagger visível só em desenvolvimento
-if (true)
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(o =>
+    {
+        // TODO: Remover /swagger para acessar o SWAGGER
+        o.RoutePrefix = "swagger";
+        o.SwaggerEndpoint("/swagger/v1/swagger.json", "DevEncurtaUrl.API v1");
+    });
 }
 
 app.UseCors(); // TODO: Para usar com angular
