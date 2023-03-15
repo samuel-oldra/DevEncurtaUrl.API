@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevEncurtaUrl.API.Persistence.Migrations
 {
     [DbContext(typeof(DevEncurtaUrlDbContext))]
-    [Migration("20230404190859_InitialMigration")]
+    [Migration("20230509133201_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.4");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
 
             modelBuilder.Entity("DevEncurtaUrl.API.Entities.ShortenedCustomLink", b =>
                 {
