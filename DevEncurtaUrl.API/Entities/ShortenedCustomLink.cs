@@ -18,7 +18,7 @@ namespace DevEncurtaUrl.API.Entities
 
         public ShortenedCustomLink(string title, string destinationLink, string domain)
         {
-            var code = title.Split(" ")[0];
+            var code = title.Split(" ")[0].ToLower();
 
             Title = title;
             DestinationLink = destinationLink;
