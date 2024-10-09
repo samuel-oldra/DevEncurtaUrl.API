@@ -97,7 +97,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(o =>
     {
-        // TODO: Remover /swagger para acessar o SWAGGER
+        // Mantido SWAGGER em /swagger, existe rota usando /{code}
         o.RoutePrefix = "swagger";
         o.SwaggerEndpoint("/swagger/v1/swagger.json", "DevEncurtaUrl.API v1");
     });

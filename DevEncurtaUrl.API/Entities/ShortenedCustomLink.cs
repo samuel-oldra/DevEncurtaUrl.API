@@ -4,15 +4,15 @@ namespace DevEncurtaUrl.API.Entities
     {
         public int Id { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
-        public string DestinationLink { get; set; }
+        public string DestinationLink { get; set; } = string.Empty;
 
-        public string ShortenedLink { get; set; }
+        public string ShortenedLink { get; set; } = string.Empty;
 
-        public string Code { get; set; }
+        public string Code { get; set; } = string.Empty;
 
-        public string CreatedAt { get; set; }
+        public string CreatedAt { get; set; } = string.Empty;
 
         private ShortenedCustomLink() { }
 

@@ -12,6 +12,10 @@ namespace DevEncurtaUrl.API.Controllers
     {
         private readonly DevEncurtaUrlDbContext _context;
 
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="context"></param>
         public ShortenedLinksController(DevEncurtaUrlDbContext context)
             => _context = context;
 
